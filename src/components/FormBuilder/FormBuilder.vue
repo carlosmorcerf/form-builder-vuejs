@@ -105,6 +105,14 @@
 							</div>
 
 							<div class="form-group row">
+								<label class="col-12 col-md-4 col-form-label col-form-label-sm">CSS Class</label>
+								<div class="col-12 col-md-8">
+									<input v-model="field.component.cssClasses" type="text" class="form-control form-control-sm" />
+								</div>
+								<small class="form-text text-muted"></small>
+							</div>
+
+							<div class="form-group row">
 								<label class="col-12 col-md-4 col-form-label col-form-label-sm">Identificador único</label>
 								<div class="col-12 col-md-8">
 									<input v-model="field.component.name" readonly type="text" class="form-control form-control-sm" />
@@ -176,14 +184,14 @@
 					</div>
 				</div>
 				<div class="card-footer text-center">
-					<a href="javascript:;" v-on:click="field.saveChanges()" class="btn btn-primary btn-sm mr-2">
-						<i class="fa fa-floppy-o"></i>
+					<a href="javascript:;" v-on:click="removeField(index)" class="btn btn-sm btn-danger mr-2">
+						<i class="fa fa-trash-o"></i>
 					</a>
 					<a href="javascript:;" v-if="field.recent === false" v-on:click="field.cancelChanges()" class="btn btn-secondary btn-sm mr-2">
 						<i class="fa fa-undo"></i>
 					</a>
-					<a href="javascript:;" v-on:click="removeField(index)" class="btn btn-sm btn-danger">
-						<i class="fa fa-trash-o"></i>
+					<a href="javascript:;" v-on:click="field.saveChanges()" class="btn btn-primary btn-sm">
+						<i class="fa fa-floppy-o"></i>
 					</a>
 				</div>
 			</div>
@@ -196,14 +204,90 @@
 			</a>
 		</div>
 
-		<div style="bg-secondary my-2" class="p-2 d-flex justify-content-between align-items-center">
-			<div>
-				<span v-if="formErrorMessage" class="text-danger">{{ formErrorMessage }}</span>
+		<div class="card mt-3" v-if="configuringForm === true">
+			<div class="card-header">
+				<b>Configurações do formulário</b>
 			</div>
 
+			<div class="card-body">
+				<div class="form-group row">
+					<label class="col-12 col-md-4 col-form-label col-form-label-sm">CSS Class (form)</label>
+					<div class="col-12 col-md-8">
+						<input v-model="formConfig.cssClasses" type="text" class="form-control form-control-sm" />
+					</div>
+					<small class="form-text text-muted">Estas classes serão incluidas na tag &lt;form&gt;</small>
+				</div>
+				<div class="form-group row">
+					<label class="col-12 col-md-4 col-form-label col-form-label-sm">CSS Class (campos)</label>
+					<div class="col-12 col-md-8">
+						<input v-model="formConfig.fieldsCssClasses" type="text" class="form-control form-control-sm" />
+					</div>
+					<small class="form-text text-muted">Estas classes serão incluídas em todos os campos</small>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-12 col-md-4 col-form-label col-form-label-sm">Texto botão enviar (submit)</label>
+					<div class="col-12 col-md-8">
+						<input v-model="formConfig.submitBtnText" type="text" class="form-control form-control-sm" />
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-12 col-md-4 col-form-label col-form-label-sm">CSS Class (submit)</label>
+					<div class="col-12 col-md-8">
+						<input v-model="formConfig.submitBtnCssClasses" type="text" class="form-control form-control-sm" />
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<div class="col-12 col-md-8 offset-md-4">
+						<div class="form-check">
+							<input v-model="formConfig.resetBtnStatus" id="resetBtnStatus" class="form-check-input" type="checkbox" />
+							<label for="resetBtnStatus" class="form-check-label">Mostrar botão cancelar? (reset)</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-12 col-md-4 col-form-label col-form-label-sm">Texto botão cancelar (reset)</label>
+					<div class="col-12 col-md-8">
+						<input v-model="formConfig.resetBtnText" type="text" class="form-control form-control-sm" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-12 col-md-4 col-form-label col-form-label-sm">CSS Class (reset)</label>
+					<div class="col-12 col-md-8">
+						<input v-model="formConfig.resetBtnCssClasses" type="text" class="form-control form-control-sm" />
+					</div>
+				</div>
+			</div>
+
+			<div class="card-footer text-center">
+				<a href="javascript:;" v-on:click="cancelFormConfig()" class="btn btn-secondary btn-sm mr-2">
+					<i class="fa fa-undo"></i>
+				</a>
+				<a href="javascript:;" v-on:click="saveFormConfig()" class="btn btn-primary btn-sm">
+					<i class="fa fa-floppy-o"></i>
+				</a>
+			</div>
+		</div>
+
+		<div class="mt-3">
+			<span v-if="formErrorMessage" class="text-danger">{{ formErrorMessage }}</span>
+		</div>
+
+		<div style="my-2" class="p-2 d-flex justify-content-end align-items-center">
+			<a class="btn btn-secondary mr-2" href="javascript:;" v-on:click="openFormConfig()">
+				<i class="fa fa-cog"></i>
+				Configurar
+			</a>
+			<a class="btn btn-secondary mr-2" href="javascript:;" v-on:click="cancelFormChanges()">
+				<i class="fa fa-undo"></i>
+				Cancelar
+			</a>
 			<a class="btn btn-primary" href="javascript:;" v-on:click="saveForm()">
 				<i class="fa fa-floppy-o"></i>
-				Salvar formulário
+				Salvar
 			</a>
 		</div>
 	</div>
@@ -244,6 +328,7 @@ var factory = {
 				tip: "",
 				status: true,
 				values: [], //{ label: "", value: "" }
+				cssClasses: null,
 				validations: {
 					required: false,
 					regexPattern: null,
@@ -366,6 +451,15 @@ var factory = {
 
 		return field;
 	},
+	formConfig: {
+		cssClasses: null,
+		fieldsCssClasses: null,
+		submitBtnText: "Enviar",
+		submitBtnCssClasses: null,
+		resetBtnText: "Cancelar",
+		resetBtnCssClasses: null,
+		resetBtnStatus: false,
+	},
 };
 
 export default {
@@ -375,26 +469,69 @@ export default {
 		containerStyles: String,
 		initialSchema: Object,
 		onSave: Function,
+		onCancel: Function,
 	},
 	data: function () {
 		return {
 			fields: [],
 			formErrorMessage: null,
+			lastSchema: null,
+			configuringForm: false,
+			oldFormConfig: null,
+			formConfig: null,
 		};
 	},
 	created: function () {
 		if (this.initialSchema) {
-			var schema = JSON.parse(JSON.stringify(this.initialSchema));
+			this.applySchema(this.initialSchema);
+		}
+	},
+	methods: {
+		openFormConfig: function () {
+			if (this.configuringForm) {
+				return;
+			}
+
+			this.oldFormConfig = JSON.parse(JSON.stringify(this.formConfig));
+			this.configuringForm = true;
+		},
+		saveFormConfig: function () {
+			if (!this.configuringForm) {
+				return;
+			}
+
+			this.configuringForm = false;
+		},
+		cancelFormConfig: function () {
+			if (!this.configuringForm) {
+				return;
+			}
+
+			this.formConfig = JSON.parse(JSON.stringify(this.oldFormConfig));
+		},
+
+		cancelFormChanges: function () {
+			this.configuringForm = false;
+			this.applySchema(this.lastSchema);
+
+			if (this.onCancel){
+				this.onCancel();
+			}
+		},
+		applySchema: function (newSchema) {
+			var schema = JSON.parse(JSON.stringify(newSchema));
 			if (schema.schemaVersion != "formbuilder-v1") {
 				alert("Invalid schema");
 			} else {
+				this.lastSchema = schema;
+				this.formConfig = schema.formConfig ? schema.formConfig : factory.formConfig;
+				this.fields = [];
+				this.config = {};
 				for (var i = 0; i < schema.fields.length; i++) {
 					this.addField(schema.fields[i]);
 				}
 			}
-		}
-	},
-	methods: {
+		},
 		saveForm: function () {
 			var isValid = true;
 			var errorMessage = "* Existem erros no formulário!";
@@ -402,6 +539,13 @@ export default {
 				schemaVersion: "formbuilder-v1",
 				fields: [],
 			};
+
+			if (this.configuringForm) {
+				isValid = false;
+				errorMessage = "* Finalize a configuração do formulário para salvar!";
+			} else {
+				schema.formConfig = this.formConfig;
+			}
 
 			for (var i = 0; i < this.fields.length; i++) {
 				if (this.fields[i].isOpen !== false) {
@@ -418,12 +562,14 @@ export default {
 
 			if (isValid) {
 				errorMessage = null;
+				schema = JSON.parse(JSON.stringify(schema));
 				if (this.onSave) {
-					this.onSave(true, JSON.parse(JSON.stringify(schema)));
+					this.onSave(true, schema, null);
+					this.lastSchema = schema;
 				}
 			} else {
 				if (this.onSave) {
-					this.onSave(false, null);
+					this.onSave(false, null, errorMessage);
 				}
 			}
 

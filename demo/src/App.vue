@@ -5,7 +5,7 @@
 				<div class="col">
 					<h2>Form Builder</h2>
 
-					<FormBuilder :formId="'form-builder-container'" :containerStyles="'padding: 15px'" :initialSchema="initialSchema" :onSave="saveForm" />
+					<FormBuilder :formId="'form-builder-container'" :containerStyles="'padding: 15px'" :initialSchema="initialSchema" :onCancel="cancelForm" :onSave="saveForm" />
 				</div>
 				<div class="col">
 					<h2>Schema</h2>
@@ -32,7 +32,8 @@ const schema = {
 			defaultValue: "",
 			tip: "",
 			values: [],
-			status:true,
+			status: true,
+			cssClasses:null,
 			validations: {
 				required: true,
 				regexPattern: null,
@@ -49,6 +50,7 @@ const schema = {
 			tip: "",
 			values: [],
 			status: true,
+			cssClasses:"campo-email",
 			validations: {
 				required: true,
 				regexPattern: null,
@@ -64,6 +66,7 @@ const schema = {
 			defaultValue: "",
 			tip: "",
 			status: true,
+			cssClasses:"",
 			values: [
 				{ label: "Profissão 1", value: "1" },
 				{ label: "Profissão 2", value: "2" },
@@ -85,12 +88,19 @@ export default {
 		FormBuilder,
 	},
 	methods: {
-		saveForm: function (success, schema) {
+		cancelForm: function () {
+			alert("Formulário cancelado!");
+		},
+		saveForm: function (success, schema, error) {
 			if (success) {
 				this.code = schema;
 				//alert(JSON.stringify(schema));
 			} else {
-				alert("Formulário inválido");
+				if (error) {
+					alert(error);
+				} else {
+					alert("Formulário inválido");
+				}
 			}
 		},
 	},
