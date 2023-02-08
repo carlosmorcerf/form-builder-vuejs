@@ -5,7 +5,7 @@
 				<div class="col">
 					<h2>Form Builder</h2>
 
-					<FormBuilder :formId="'form-builder-container'" :containerStyles="'padding: 15px'" :initialSchema="initialSchema" :onCancel="cancelForm" :onSave="saveForm" />
+					<FormBuilder :formId="'form-builder-container'" :enableInputFile="true" :containerStyles="'padding: 15px'" :initialSchema="initialSchema" :onCancel="cancelForm" :onSave="saveForm" />
 				</div>
 				<div class="col">
 					<h2>Schema</h2>

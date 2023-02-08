@@ -51,6 +51,7 @@
 								<option value="label">Label</option>
 								<option value="text">Texto</option>
 								<option value="textarea">Textarea</option>
+								<option v-if="enableInputFile == true" value="file">Arquivo</option>
 								<option value="email">E-mail</option>
 								<option value="password">Senha</option>
 								<option value="phone">Telefone</option>
@@ -121,20 +122,11 @@
 						</div>
 
 						<div v-if="field.tab == 'options' && field.haveOptions()" class="mt-3">
-							<div
-								v-for="(option, optionIndex) in field.component.values"
-								class="my-3 p-2 bg-white w-100 field-option-row d-flex align-items-center"
-								:key="optionIndex"
-								v-bind:drag-index="optionIndex"
-								v-on:dragover="dragover($event, 'field-option-row')"
-								v-on:drop="
-									drop($event, 'field-option-row', (a, b) => {
-										field.moveValueOption(a, b);
-									})
-								"
-								v-on:dragenter="dragenter($event, 'field-option-row')"
-								v-on:dragleave="dragleave($event, 'field-option-row')"
-							>
+							<div v-for="(option, optionIndex) in field.component.values" class="my-3 p-2 bg-white w-100 field-option-row d-flex align-items-center" :key="optionIndex" v-bind:drag-index="optionIndex" v-on:dragover="dragover($event, 'field-option-row')" v-on:drop="
+								drop($event, 'field-option-row', (a, b) => {
+									field.moveValueOption(a, b);
+								})
+							" v-on:dragenter="dragenter($event, 'field-option-row')" v-on:dragleave="dragleave($event, 'field-option-row')">
 								<div class="row align-items-center mr-2"><label class="col-auto">Label: </label> <input type="text" v-model="option.label" class="form-control col" placeholder="Label" /></div>
 								<div class="row align-items-center mr-2"><label class="col-auto">Valor:</label> <input type="text" v-model="option.value" class="form-control col" placeholder="Valor" /></div>
 								<div>
@@ -297,6 +289,7 @@
 .dragging {
 	opacity: 0.5;
 }
+
 .dragover {
 	border: 2px dashed rgb(233, 53, 53) !important;
 }
@@ -342,7 +335,7 @@ var factory = {
 
 		var field = {
 			isTextBox: function () {
-				if (this.component.type == "text" || this.component.type == "textarea" || this.component.type == "password" || this.component.type == "email" || this.component.type == "phone" || this.component.type == "date" || this.component.type == "cpf" || this.component.type == "cnpj" || this.component.type == "cep") {
+				if (this.component.type == "file" || this.component.type == "text" || this.component.type == "textarea" || this.component.type == "password" || this.component.type == "email" || this.component.type == "phone" || this.component.type == "date" || this.component.type == "cpf" || this.component.type == "cnpj" || this.component.type == "cep") {
 					return true;
 				}
 				return false;
@@ -470,6 +463,7 @@ export default {
 		initialSchema: Object,
 		onSave: Function,
 		onCancel: Function,
+		enableInputFile: String
 	},
 	data: function () {
 		return {
@@ -478,7 +472,7 @@ export default {
 			lastSchema: null,
 			configuringForm: false,
 			oldFormConfig: null,
-			formConfig: null,
+			formConfig: null
 		};
 	},
 	created: function () {
@@ -514,7 +508,7 @@ export default {
 			this.configuringForm = false;
 			this.applySchema(this.lastSchema);
 
-			if (this.onCancel){
+			if (this.onCancel) {
 				this.onCancel();
 			}
 		},
