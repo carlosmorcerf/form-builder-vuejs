@@ -62,11 +62,12 @@
 								<option value="select">Select</option>
 								<option value="checkbox">Checkbox</option>
 								<option value="radio">Radio</option>
+								<option value="html">HTML</option>
 							</select>
 						</div>
 					</div>
 
-					<div v-if="field.component.type && field.component.type != 'label'" class="p-2">
+					<div v-if="field.component.type && field.component.type != 'label' && field.component.type != 'html'" class="p-2">
 						<hr />
 
 						<ul class="nav nav-tabs">
@@ -126,7 +127,7 @@
 								drop($event, 'field-option-row', (a, b) => {
 									field.moveValueOption(a, b);
 								})
-							" v-on:dragenter="dragenter($event, 'field-option-row')" v-on:dragleave="dragleave($event, 'field-option-row')">
+								" v-on:dragenter="dragenter($event, 'field-option-row')" v-on:dragleave="dragleave($event, 'field-option-row')">
 								<div class="row align-items-center mr-2"><label class="col-auto">Label: </label> <input type="text" v-model="option.label" class="form-control col" placeholder="Label" /></div>
 								<div class="row align-items-center mr-2"><label class="col-auto">Valor:</label> <input type="text" v-model="option.value" class="form-control col" placeholder="Valor" /></div>
 								<div>
@@ -173,6 +174,18 @@
 								</div>
 							</div>
 						</div>
+					</div>
+
+					<div v-if="field.component.type == 'html'">
+						<hr />
+
+						<div class="form-group row">
+							<label class="col-12 col-md-4 col-form-label col-form-label-sm">Valor</label>
+							<div class="col-12 col-md-8">
+								<textarea v-model="field.component.defaultValue" rows="4" type="text" class="form-control form-control-sm"></textarea>
+							</div>
+						</div>
+
 					</div>
 				</div>
 				<div class="card-footer text-center">
